@@ -61,7 +61,7 @@
         
     }else
     {
-        self.HBDDelegate = self.delegate;
+        self.HBDDelegate = delegate;
     }
 }
 
