@@ -9,6 +9,7 @@
 #import "UIViewController+HBD.h"
 #import "HBDNavigationBar.h"
 
+
 @interface HBDNavigationController () <UIGestureRecognizerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, readonly) HBDNavigationBar *navigationBar;
@@ -19,6 +20,7 @@
 @property (nonatomic, strong) UIImageView *fromFakeImageView;
 @property (nonatomic, strong) UIImageView *toFakeImageView;
 @property (nonatomic, assign) BOOL inGesture;
+@property(nonatomic,weak)id<UINavigationControllerDelegate> HBDDelegate;
 
 @end
 
@@ -49,6 +51,18 @@
     self.delegate = self;
     [self.navigationBar setTranslucent:YES];
     [self.navigationBar setShadowImage:[UINavigationBar appearance].shadowImage];
+}
+
+- (void)setDelegate:(id<UINavigationControllerDelegate>)delegate
+{
+    if (!self.delegate) {
+        
+        [super setDelegate:delegate];
+        
+    }else
+    {
+        self.HBDDelegate = self.delegate;
+    }
 }
 
 - (void)handlePopGesture:(UIScreenEdgePanGestureRecognizer *)recognizer {
@@ -151,6 +165,14 @@
         }
     } else {
         [self updateNavigationBarForViewController:viewController];
+    }
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (self.HBDDelegate && [self.HBDDelegate respondsToSelector:@selector(navigationController:didShowViewController:animated:)]) {
+        
+        [self.HBDDelegate navigationController:navigationController didShowViewController:viewController animated:animated];
     }
 }
 
