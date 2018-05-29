@@ -55,7 +55,7 @@
 
 - (void)setDelegate:(id<UINavigationControllerDelegate>)delegate
 {
-    if (!self.delegate) {
+    if ([delegate isKindOfClass:[UINavigationController class]]) {
         
         [super setDelegate:delegate];
         
